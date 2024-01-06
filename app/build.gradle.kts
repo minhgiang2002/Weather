@@ -42,7 +42,6 @@ dependencies {
 
     implementation ("com.squareup.picasso:picasso:2.5.2")
 
-    implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.22")
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
+
 
 }
