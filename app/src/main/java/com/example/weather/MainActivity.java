@@ -1,6 +1,10 @@
 package com.example.weather;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +13,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.Bundle;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,28 +41,102 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
     EditText edtTenThanhPho;
     TextView tvTenTp, tvTenQg, tvNhietDo, tvDoAm, tvGio, tvMay, tvNgayThang, tvTrangThai;
     Button btnChon, btnTiepTheo;
     ImageView imgIcon;
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
+    private FusedLocationProviderClient fusedLocationClient;
+    private boolean isLocationRequested = false;
 
-    static final String DEFAULT_CITY = "Saigon";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        // Thêm hàm để kiểm tra và yêu cầu quyền địa vị
+        //requestLocationPermission();
 
-        getCurrentWeatherData(DEFAULT_CITY);
+        // Khởi tạo FusedLocationProviderClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // Gọi hàm định vị
+        getLastLocation();
         clickButton();
     }
+
+    private void getLastLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Nếu quyền chưa được cấp, yêu cầu quyền truy cập vị trí từ người dùng
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+
+                        // Sử dụng API địa lý của Google để chuyển đổi vị trí thành tên thành phố
+                        getCityNameFromCoordinates(latitude, longitude);
+                    }
+                });
+    }
+
+    private void getCityNameFromCoordinates(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if (addresses.size() > 0) {
+            String cityName = addresses.get(0).getLocality();
+            //Log.d("CityName", "Original: " + cityName);
+            // Kiểm tra và loại bỏ "Thành phố" hoặc các ký tự không mong muốn khác
+            cityName = cityName.replaceAll("thành phố", "").trim();
+            //Log.d("CityName", "Processed: " + cityName);
+            // Hiển thị tên thành phố
+            getCurrentWeatherData(cityName);
+            edtTenThanhPho.setText(cityName);
+
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Quyền được cấp, thực hiện định vị
+                getLastLocation();
+                // Khởi tạo lại giao diện người dùng
+                init();
+                // Đặt cờ đánh dấu đã định vị
+                isLocationRequested = true;
+            } else {
+                // Quyền không được cấp, thông báo cho người dùng
+                Toast.makeText(this, "Permission denied. Unable to get location.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 
     public void getCurrentWeatherData(String city) {
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
