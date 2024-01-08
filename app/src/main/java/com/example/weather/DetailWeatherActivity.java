@@ -45,14 +45,16 @@ public class DetailWeatherActivity extends AppCompatActivity {
         String City = intent.getStringExtra("name");
         Log.d("ketqua", "Dữ liệu truyền qua: " + City);
 
-        if (City == null || City.equals("")) {
-            City1 = "Saigon";
-            get7DayWeather(City1);
-        } else {
-            City1 = City;
-            get7DayWeather(City1);
-        }
 
+            get7DayWeather(City);
+
+
+        imgback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        }) ;
 
     }
 
@@ -98,10 +100,10 @@ public class DetailWeatherActivity extends AppCompatActivity {
                                 String NhietdoMin = String. valueOf(b.intValue()) ;
                                 JSONArray jsonArrayWeather = jsonObjectlist.getJSONArray ("weather") ;
                                 JSONObject jsonObjectWeather = jsonArrayWeather.getJSONObject (0) ;
-                                String status = jsonObjectWeather.getString ("description") ;
+                                String status = jsonObjectWeather.getString ("main") ;
                                 String icon = jsonObjectWeather.getString ("icon") ;
-
-                                    MangWeather.add (new Weather (Day, status, icon, NhietdoMax, NhietdoMin) ) ;
+                                String vietnameseStatus = translateStatusToVietnamese(status);
+                                    MangWeather.add (new Weather (Day, vietnameseStatus, icon, NhietdoMax, NhietdoMin) ) ;
 
 
 
@@ -123,5 +125,30 @@ public class DetailWeatherActivity extends AppCompatActivity {
         );
         requestQueue.add(request);
     }
-
+    private String translateStatusToVietnamese(String englishStatus) {
+        switch (englishStatus) {
+            case "Clear":
+                return "Trời quang đãng";
+            case "Clouds":
+                return "Nhiều mây";
+            case "Few clouds":
+                return "Mây ít";
+            case "Scattered clouds":
+                return "Mây rải rác";
+            case "Broken clouds":
+                return "Mây rải rác";
+            case "Shower rain":
+                return "Mưa rào";
+            case "Rain":
+                return "Mưa";
+            case "Thunderstorm":
+                return "Dông";
+            case "Snow":
+                return "Tuyết";
+            case "Mist":
+                return "Sương mù";
+            default:
+                return englishStatus;
+        }
+    }
 }

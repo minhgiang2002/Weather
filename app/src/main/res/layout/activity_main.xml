@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:background="@drawable/backfround"
+    android:padding="16dp"
+    android:background="@drawable/backfround1"
     tools:context=".MainActivity">
-
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
 
         <EditText
             android:id="@+id/edtTenTp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="#FFFFFF"
@@ -25,16 +26,18 @@
             android:id="@+id/btnThanhPho"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="8dp"
             android:text="Chọn" />
     </LinearLayout>
 
+    <!-- City Information Section -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="151dp"
+            android:layout_width="55dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:text="Thành phố"
@@ -44,22 +47,23 @@
 
         <TextView
             android:id="@+id/tvThanhPho"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="10"
+            android:layout_weight="2"
             android:text=""
-            android:textColor="#FFFFFF"
             android:textAlignment="center"
+            android:textColor="#FFFFFF"
             android:textSize="26sp" />
     </LinearLayout>
 
+    <!-- Country Information Section -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="121dp"
+            android:layout_width="174dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Quốc gia"
@@ -69,29 +73,36 @@
 
         <TextView
             android:id="@+id/tvQuocGia"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="3"
+            android:layout_weight="4"
+            android:layout_marginStart="10dp"
             android:text=""
             android:textColor="#FFFFFF"
             android:textAlignment="center"
             android:textSize="26sp" />
     </LinearLayout>
 
+    <!-- Weather Information Section -->
+
+    <!-- Additional Weather Details Section -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical">
+
+
 
         <ImageView
             android:id="@+id/imgThoiTiet"
             android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="50dp"
+
             android:src="@mipmap/ic_launcher" />
 
         <TextView
@@ -101,32 +112,30 @@
             android:layout_gravity="center"
             android:text="Nhiệt độ"
             android:textColor="#FF4081"
-            android:textSize="50dp" />
+            android:textSize="50sp" />
 
         <TextView
             android:id="@+id/tvTrangThai"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Trạng thai"
-            android:textColor="#FFFFFF"
+            android:text="Trạng thái"
+            android:textColor="#419EEA"
             android:textSize="40sp" />
     </LinearLayout>
 
-
     <LinearLayout
-        android:layout_marginBottom="12dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
 
-
+        <!-- Humidity -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
-
 
             <ImageView
                 android:layout_width="50dp"
@@ -143,15 +152,15 @@
                 android:textSize="20sp" />
         </LinearLayout>
 
+        <!-- Cloud -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
-
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/cloud" />
@@ -166,8 +175,9 @@
                 android:textSize="20sp" />
         </LinearLayout>
 
+        <!-- Wind -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
@@ -188,23 +198,26 @@
                 android:textSize="20sp" />
         </LinearLayout>
 
-
     </LinearLayout>
 
+    <!-- Date Section -->
     <TextView
         android:id="@+id/tvNgayThang"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Ngay - Thang - Nam"
+        android:text="Ngày - Tháng - Năm"
         android:textSize="25sp"
+        android:layout_marginTop="7dp"
         android:textColor="#FFFFFF"/>
 
+    <!-- Next Days Button -->
     <Button
         android:id="@+id/btnTiepTheo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
         android:text="Các ngày tiếp theo" />
+
 </LinearLayout>
